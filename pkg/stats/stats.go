@@ -3,25 +3,25 @@ package stats
 import "github.com/gholib/bank/v2/pkg/types"
 
 // Avg average payment amount
-func Avg(payments []types.Payment) types.Money {
+func CategoriesAvg(payments []types.Payment) map[types.Category]types.Money {
+	paymentByCategories := map[types.Category]types.Money{}
+
 	if len(payments) < 0 {
-		return 0
+		return paymentByCategories
 	}
-	var summa, count types.Money
+
+	counts := map[types.Category]types.Money{}
+
 	for _, payment := range payments {
-		if payment.Amount < 0 {
-			continue
-		}
-		if payment.Status == types.StatusFail {
-			continue
-		}
-		summa += payment.Amount
-		count++
+		paymentByCategories[payment.Category] += payment.Amount
+		counts[payment.Category]++
 	}
 
-	result := summa / count
+	for key, value := range paymentByCategories {
+		paymentByCategories[key] = value / counts[key]
+	}
 
-	return result
+	return paymentByCategories
 }
 
 //TotalInCategory amount of purchases by category
