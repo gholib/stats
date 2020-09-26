@@ -1,6 +1,8 @@
 package stats
 
-import "github.com/gholib/bank/v2/pkg/types"
+import (
+	"github.com/gholib/bank/v2/pkg/types"
+)
 
 // Avg average payment amount
 func CategoriesAvg(payments []types.Payment) map[types.Category]types.Money {
@@ -24,23 +26,21 @@ func CategoriesAvg(payments []types.Payment) map[types.Category]types.Money {
 	return paymentByCategories
 }
 
-//TotalInCategory amount of purchases by category
-func TotalInCategory(payments []types.Payment, category types.Category) types.Money {
-	if len(payments) < 0 {
-		return 0
-	}
-	var summa types.Money
-	for _, payment := range payments {
-		if payment.Category == category {
-			if payment.Amount < 0 {
-				continue
-			}
-			if payment.Status == types.StatusFail {
-				continue
-			}
-			summa += payment.Amount
-		}
+func PeriodsDynamic(first map[types.Category]types.Money, second map[types.Category]types.Money) map[types.Category]types.Money {
+	periodsDynamic := map[types.Category]types.Money{}
+
+	if len(first) == 0 && len(second) == 0 {
+		return periodsDynamic
 	}
 
-	return summa
+	currentPeriods := first
+	if len(first) < len(second) {
+		currentPeriods = second
+	}
+
+	for key := range currentPeriods {
+		periodsDynamic[key] = second[key] - first[key]
+	}
+
+	return periodsDynamic
 }
