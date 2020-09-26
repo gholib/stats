@@ -1,6 +1,6 @@
 package stats
 
-import "github.com/gholib/bank/pkg/types"
+import "github.com/gholib/bank/v2/pkg/types"
 
 // Avg average payment amount
 func Avg(payments []types.Payment) types.Money {
@@ -10,7 +10,10 @@ func Avg(payments []types.Payment) types.Money {
 	var summa, count types.Money
 	for _, payment := range payments {
 		if payment.Amount < 0 {
-			panic("Negative Amount")
+			continue
+		}
+		if payment.Status == types.StatusFail {
+			continue
 		}
 		summa += payment.Amount
 		count++
@@ -30,7 +33,10 @@ func TotalInCategory(payments []types.Payment, category types.Category) types.Mo
 	for _, payment := range payments {
 		if payment.Category == category {
 			if payment.Amount < 0 {
-				panic("Negative Amount")
+				continue
+			}
+			if payment.Status == types.StatusFail {
+				continue
 			}
 			summa += payment.Amount
 		}
