@@ -1,6 +1,6 @@
 package stats
 
-import "github.com/gholib/bank/pkg/bank/types"
+import "github.com/gholib/bank/pkg/types"
 
 // Avg average payment amount
 func Avg(payments []types.Payment) types.Money {

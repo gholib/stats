@@ -3,7 +3,7 @@ package stats
 import (
 	"fmt"
 
-	"github.com/gholib/bank/pkg/bank/types"
+	"github.com/gholib/bank/pkg/types"
 )
 
 func ExampleAvg() {
